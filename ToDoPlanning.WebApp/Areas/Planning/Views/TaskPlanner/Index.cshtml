@@ -1,0 +1,87 @@
+﻿@using ToDoPlanning.Shared.Utility.Results.ComplexTypes
+@model ToDoPlanning.Entity.Dto.TaskPlanListDto
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Task Plan Index";
+}
+@if (Model.ResultStatus == ResultStatus.Success)
+{
+    <div id="modalPlaceHolder" aria-hidden="true"></div>
+    <div class="card mb-4 mt-2">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Task Plan
+        </div>
+        <div class="card-body">
+            <div class="spinner-border" role="status" style="display: none;">
+                <span class="sr-only">Yükleniyor...</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="taskPlanTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Plan ID</th>
+                            <th>Plan Adı</th>
+                            <th>Plan Açıklaması</th>
+                            <th>Plan Aktif Mi?</th>
+                            <th>Plan Başlama Tarihi</th>
+                            <th>Plan Bitiş Tarihi</th>
+                            <th>Toplam Süre (Saat)</th>
+                            <th>Toplam Süre (Hafta)</th>
+                            <th>Developer Adı</th>
+                            <th>Task Adı</th>
+                            <th>Task Zorluğu</th>
+                            <th>Task Süresi</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Plan ID</th>
+                            <th>Plan Adı</th>
+                            <th>Plan Açıklaması</th>
+                            <th>Plan Aktif Mi?</th>
+                            <th>Plan Başlama Tarihi</th>
+                            <th>Plan Bitiş Tarihi</th>
+                            <th>Toplam Süre (Saat)</th>
+                            <th>Toplam Süre (Hafta)</th>
+                            <th>Developer Adı</th>
+                            <th>Task Adı</th>
+                            <th>Task Zorluğu</th>
+                            <th>Task Süresi</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var toDoTask in Model.TaskPlan.ToDoTasks)
+                        {
+                        <tr name="@Model.TaskPlan.ID">
+                            <td>@Model.TaskPlan.ID</td>
+                            <td>@Model.TaskPlan.Name</td>
+                            <td>@Model.TaskPlan.Description</td>
+                            <td>@Model.TaskPlan.IsActive</td>
+                            <td>@Model.TaskPlan.StartDate.ToShortDateString()</td>
+                            <td>@Model.TaskPlan.EndDate.ToShortDateString()</td>
+                            <td>@Model.TaskPlan.TotalHour</td>
+                            <td>@Model.TaskPlan.TotalWeek</td>
+                            <td>@toDoTask.Developer.Name</td>
+                            <td>@toDoTask.ExternalID</td>
+                            <td>@toDoTask.Difficulty</td>
+                            <td>@toDoTask.Duration</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.ResultStatus == ResultStatus.Error)
+{
+<div class="alert alert-danger mt-3">
+    @Model.Message <br />
+    Planlama sayfasına geri dönmek için lütfen <a class="alert-link" asp-area="Planning" asp-controller="Home" asp-action="Index">tıklayınız.</a>
+</div>
+}
+@section Scripts
+{
+    <script src="~/js/taskplannerIndex.js" type="application/ecmascript"></script>
+}
